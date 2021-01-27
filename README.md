@@ -1,2 +1,5 @@
 # Steering Evolution AI
-Made by Hussein Elguindi. Loosely based off of The Coding Train's videos on YouTube.
+A project to illustrate evolution AI. Each vehicle has the has the same health, but ones that move faster have a higher metabolism. Depending on the amount of food available, some vehicles use their speed to their advantage. Only the ones with the adequete speed survive.
+https://github.com/HusseinElguindi/p5js-steering-ai
+
+Made by Hussein Elguindi. 
