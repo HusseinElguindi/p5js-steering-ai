@@ -1,8 +1,8 @@
 function setup() {
     frameRate(60);
-    createCanvas(800, 600);
+    createCanvas(windowWidth, windowHeight);
 
-    foodChance = 0.2
+    foodChance = 0.2;
 
     stableFood = true;
     foodLevel = 50;
@@ -11,7 +11,12 @@ function setup() {
     population = new Population(100);
 
     population.reproduceRate = 0.1;
-    population.mutationRate = 0.25;
+    population.mutationRate = 0.1;
+
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -19,13 +24,12 @@ function draw() {
 
     if (this.stableFood && this.food.foodPos.length < this.foodLevel) {
         for (let i = 0; i < (this.foodLevel-this.food.foodPos.length); i++) {
-            this.food.foodPos.push(createVector(random(10, width-10), random(10, height-10)));
+            this.food.newFood();
         }
-    } 
-    else if (!this.stableFood) {
-        newFood();
     }
-    
+    else if (random(1) < this.foodChance) {
+        this.food.newFood();
+    }
     this.food.show();
 
     reproduce();
@@ -40,7 +44,7 @@ function stats() {
     fill(0);
     textSize(20);
     textAlign(LEFT, BOTTOM);
-    text(`Vehicles: ${this.population.members.length}\nFood: ${this.food.foodPos.length}`, 10, -35, width, height);    
+    text(`Vehicles: ${this.population.members.length}\nFood: ${this.food.foodPos.length}`, 10, -35, width, height);
 
     var dict = {};
     for (let i = 0; i < population.members.length; i++) {
@@ -68,14 +72,17 @@ function updatePop() {
     for (let i = this.population.members.length-1; i > -1; i--) {
         let vehicle = this.population.members[i];
 
+        // vehicle.seek(createVector(mouseX, mouseY)); // go to cursor
+
         vehicle.eat(this.food.foodPos);
-        // vehicle.seek(createVector(mouseX, mouseY));
         vehicle.update();
         vehicle.show();
 
+        // Vehicle is dead, no health
+        // replace with a piece of food
         if (vehicle.health <= 0) {
             this.population.members.splice(i, 1);
-            this.food.foodPos.push(createVector(vehicle.pos.x,vehicle.pos.y));
+            this.food.foodPos.push(createVector(vehicle.pos.x, vehicle.pos.y));
         }
     }
 }
@@ -86,12 +93,6 @@ function reproduce() {
     }
 }
 
-function newFood() {
-    if (random(1) < this.foodChance) {
-        this.food.foodPos.push(createVector(random(10, width-10), random(10, height-10)));
-    }
-}
-
-function mouseDragged() {
-    this.food.foodPos.push(createVector(mouseX, mouseY));
-}
+// function mouseDragged() {
+//     this.food.foodPos.push(createVector(mouseX, mouseY));
+// }

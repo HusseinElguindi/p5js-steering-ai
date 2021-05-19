@@ -6,10 +6,10 @@ class Vehicle {
     // maxSpeed = random(2, 10);
     maxForce = 0;
 
-    scale = 0.5;
+    scale = 1.5;
 
     health = 4;
-    
+
     eaten = 0;
     fitness = 0;
 
@@ -26,17 +26,12 @@ class Vehicle {
     update() {
         this.vel.add(this.acc);
         this.vel.limit(this.dna.maxSpeed);
-        
+
         this.pos.add(this.vel);
 
         this.acc.mult(0);
 
         this.health -= (this.dna.maxSpeed/200);
-        // if (this.maxHealth != this.dna.maxSpeed) {
-        //     print("SOMETHING IS WRONG");
-        //     // this.maxHealth = this.dna.maxSpeed;
-        // }
-        // print(`${this.maxHealth} - ${this.health} - ${this.dna.maxSpeed}`);
     }
 
     applyForce(force) {
@@ -54,20 +49,24 @@ class Vehicle {
         this.applyForce(steer);
     }
 
+    distSq2D(v1, v2) {
+        return sq(v1.x - v2.x) + sq(v1.y - v2.y);
+    }
+
     eat(list) {
         var closest = Infinity;
         var index = -1;
 
         for (let i = list.length-1; i > -1; i--) {
-            var d = p5.Vector.dist(this.pos, list[i]);
+            var d = this.distSq2D(this.pos, list[i]);
 
             if (d < closest) {
                 closest = d;
                 index = i;
             }
         }
-        
-        if (closest < 10 && this.health < this.maxHealth) {
+
+        if (closest < 100 && this.health < this.maxHealth) {
             list.splice(index, 1);
             this.eaten += 1;
             this.health += 1;
@@ -79,7 +78,7 @@ class Vehicle {
             this.health = this.maxHealth;
         }
     }
-    
+
     show() {
         stroke(0);
         strokeWeight(1);
@@ -88,14 +87,27 @@ class Vehicle {
         fill(col);
 
         push();
-        translate(this.pos.x, this.pos.y);
-        rotate(this.vel.heading() + PI/2);
-        triangle(0, 0, (-15*this.scale), (40*this.scale), (15*this.scale), (40*this.scale));
+        translate(this.pos.x, this.pos.y); rotate(this.vel.heading() + PI/2);
+
+        // triangle(0, 0, (-15*this.scale), (40*this.scale), (15*this.scale), (40*this.scale));
+        // triangle(circleRadius, 0, 0, circleRadius, circleDiameter, circleRadius)
+
+        let circleDiameter = 5 * this.scale;
+        let circleRadius = circleDiameter / 2;
+        let rectHeight = 13 * this.scale;
+
+        noStroke()
+        ellipseMode(CENTER);
+        ellipse(circleRadius, circleRadius, circleDiameter);
+        rectMode(CORNERS);
+        rect(0, circleRadius, circleDiameter, rectHeight);
+        ellipse(circleRadius, rectHeight, circleDiameter)
+
         pop();
     }
 
     calcFitness() {
-        this.fitness = int(this.eaten*this.health*100);
+        this.fitness = int(this.eaten * this.health * 100);
         return this.fitness;
     }
 }
