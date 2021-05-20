@@ -92,9 +92,9 @@ class Vehicle {
         // triangle(0, 0, (-15*this.scale), (40*this.scale), (15*this.scale), (40*this.scale));
         // triangle(circleRadius, 0, 0, circleRadius, circleDiameter, circleRadius)
 
-        let circleDiameter = 5 * this.scale;
-        let circleRadius = circleDiameter / 2;
-        let rectHeight = 13 * this.scale;
+        const circleDiameter = 5 * this.scale;
+        const circleRadius = circleDiameter / 2;
+        const rectHeight = (13 * this.scale * (this.dna.maxSpeed * 2)) / 13;
 
         noStroke()
         ellipseMode(CENTER);
