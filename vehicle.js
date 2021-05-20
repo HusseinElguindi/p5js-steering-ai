@@ -3,7 +3,6 @@ class Vehicle {
     acc = createVector(0, 0);
     vel = createVector(0, 0);
 
-    // maxSpeed = random(2, 10);
     maxForce = 0;
 
     scale = 1.5;
@@ -66,7 +65,8 @@ class Vehicle {
             }
         }
 
-        if (closest < 100 && this.health < this.maxHealth) {
+        const foodW = pow(10 * 0.7 + 1, 2)
+        if (closest < foodW && this.health < this.maxHealth) {
             list.splice(index, 1);
             this.eaten += 1;
             this.health += 1;
@@ -87,10 +87,8 @@ class Vehicle {
         fill(col);
 
         push();
-        translate(this.pos.x, this.pos.y); rotate(this.vel.heading() + PI/2);
-
-        // triangle(0, 0, (-15*this.scale), (40*this.scale), (15*this.scale), (40*this.scale));
-        // triangle(circleRadius, 0, 0, circleRadius, circleDiameter, circleRadius)
+        translate(this.pos.x, this.pos.y);
+        rotate(this.vel.heading() + PI/2);
 
         const circleDiameter = 5 * this.scale;
         const circleRadius = circleDiameter / 2;
