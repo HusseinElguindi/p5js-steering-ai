@@ -3,4 +3,4 @@ A project to illustrate evolution AI. Each vehicle has the has the same health, 
 
 https://husseinelguindi.github.io/steering-evolution
 
-Made by Hussein Elguindi. 
+Hussein Elguindi. 
